@@ -82,7 +82,7 @@ if uploaded_file:
         image = np.array(image)
         image = cv2.resize(image, (256, 256))
         
-        st.image(image, caption="🖼 Original Image", use_column_width=True, channels="L")
+        st.image(image, caption="🖼 Original Image", use_container_width=True, channels="L")
         
         # Encrypt and decrypt the image
         encrypted_image, chaotic_seq = encrypt_image(image, float(st.session_state["x0"]), r)
@@ -91,9 +91,9 @@ if uploaded_file:
         # Display encrypted and decrypted images
         col1, col2 = st.columns(2)
         with col1:
-            st.image(encrypted_image, caption="🔏 Encrypted Image", use_column_width=True, channels="L")
+            st.image(encrypted_image, caption="🔏 Encrypted Image", use_container_width=True, channels="L")
         with col2:
-            st.image(decrypted_image, caption="🔓 Decrypted Image", use_column_width=True, channels="L")
+            st.image(decrypted_image, caption="🔓 Decrypted Image", use_container_width=True, channels="L")
         
         # Save encrypted and decrypted images locally
         cv2.imwrite("encrypted_image.jpg", encrypted_image)
