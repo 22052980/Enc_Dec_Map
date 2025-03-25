@@ -48,6 +48,15 @@ st.markdown("""
             border-radius: 8px;
             padding: 10px;
         }
+        /* Remove number input arrows */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -63,7 +72,7 @@ if "x0" not in st.session_state:
     st.session_state["x0"] = 0.56789
 
 # User input for chaotic map parameters
-x0 = st.number_input("🔢 Enter initial value (x0)", min_value=0.0, max_value=1.0, value=st.session_state["x0"], step=0.00001, key="x0")
+x0 = st.text_input("🔢 Enter initial value (x0)", value=str(st.session_state["x0"]), key="x0")
 r = st.slider("🎚 Select r value", min_value=3.5, max_value=4.0, value=3.99, step=0.01)
 
 if uploaded_file:
@@ -76,7 +85,7 @@ if uploaded_file:
         st.image(image, caption="🖼 Original Image", use_column_width=True, channels="L")
         
         # Encrypt and decrypt the image
-        encrypted_image, chaotic_seq = encrypt_image(image, st.session_state["x0"], r)
+        encrypted_image, chaotic_seq = encrypt_image(image, float(st.session_state["x0"]), r)
         decrypted_image = decrypt_image(encrypted_image, chaotic_seq)
         
         # Display encrypted and decrypted images
