@@ -67,12 +67,18 @@ st.write("Secure your images with chaotic encryption")
 # File upload functionality
 uploaded_file = st.file_uploader("📂 Upload an image", type=["jpg", "png", "jpeg"], help="Choose an image to encrypt and decrypt")
 
-# Initialize session state for x0 if not set
+# Ensure 'x0' is initialized in session state
 if "x0" not in st.session_state:
-    st.session_state["x0"] = 0.56789
+    st.session_state["x0"] = "0.56789"  # Keep it as a string to match text_input
 
-# User input for chaotic map parameters
-x0 = st.text_input("🔢 Enter initial value (x0)", value=str(st.session_state["x0"]), key="x0")
+x0 = st.text_input("🔢 Enter initial value (x0)", value=st.session_state["x0"])
+
+# Convert x0 to float safely
+try:
+    x0 = float(x0)
+except ValueError:
+    st.error("Invalid input for x0. Please enter a numeric value.")
+
 r = st.slider("🎚 Select r value", min_value=3.5, max_value=4.0, value=3.99, step=0.01)
 
 if uploaded_file:
@@ -85,7 +91,7 @@ if uploaded_file:
         st.image(image, caption="🖼 Original Image", use_container_width=True, channels="L")
         
         # Encrypt and decrypt the image
-        encrypted_image, chaotic_seq = encrypt_image(image, float(st.session_state["x0"]), r)
+        encrypted_image, chaotic_seq = encrypt_image(image, x0, r)
         decrypted_image = decrypt_image(encrypted_image, chaotic_seq)
         
         # Display encrypted and decrypted images
